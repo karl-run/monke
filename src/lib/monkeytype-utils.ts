@@ -1,0 +1,26 @@
+import * as R from 'remeda'
+import { Best, PersonalBests } from '@/lib/monkeytype-user'
+
+type Words = `${'words'}-${'10' | '25' | '50' | '100'}`
+type Time = `${'time'}-${'15' | '30' | '60' | '120'}`
+
+export function getPersonalBest(best: PersonalBests, type: Words | Time, lang: string): Best | undefined {
+  return R.pipe(
+    best,
+    lookupType(type),
+    R.find((it) => it.language === lang),
+  )
+}
+
+function lookupType(type: Words | Time) {
+  return (best: PersonalBests): Best[] => {
+    const [time, num] = type.split('-') as [keyof PersonalBests, string]
+
+    switch (time) {
+      case 'time':
+        return best.time[num as keyof PersonalBests['time']]
+      case 'words':
+        return best.words[num as keyof PersonalBests['words']]
+    }
+  }
+}

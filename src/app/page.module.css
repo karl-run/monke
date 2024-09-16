@@ -1,0 +1,4 @@
+.baseGrid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(122px, 1fr));
+}
