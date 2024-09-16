@@ -1,5 +1,5 @@
 import * as R from 'remeda'
-import { Best, PersonalBests } from '@/lib/monkeytype-user'
+import { Best, MonkeyTypeUser, PersonalBests } from '@/lib/monkeytype-user'
 
 type Words = `${'words'}-${'10' | '25' | '50' | '100'}`
 type Time = `${'time'}-${'15' | '30' | '60' | '120'}`
@@ -23,4 +23,15 @@ function lookupType(type: Words | Time) {
         return best.words[num as keyof PersonalBests['words']]
     }
   }
+}
+
+export function getOtherLangs(users: MonkeyTypeUser[]): string[] {
+  return R.pipe(
+    users,
+    R.flatMap((it) => [...R.values(it.personalBests.time), ...R.values(it.personalBests.words)]),
+    R.flat(),
+    R.map((it) => it.language),
+    R.unique(),
+    R.sortBy([(it) => it, 'desc']),
+  )
 }

@@ -2,9 +2,10 @@ import { getUser } from '@/lib/monkeytype'
 import { createSearchParamsCache, SearchParams } from 'nuqs/server'
 import { parseAsArrayOf, parseAsString } from 'nuqs'
 import { Best, MonkeyTypeUser } from '@/lib/monkeytype-user'
-import { getPersonalBest } from '@/lib/monkeytype-utils'
+import { getOtherLangs, getPersonalBest } from '@/lib/monkeytype-utils'
 
 import styles from './page.module.css'
+import LangPicker from '@/app/lang-picker'
 
 type Props = {
   searchParams: SearchParams
@@ -30,9 +31,14 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div>
-      <div className="p-3">
-        <h1 className="text-3xl">Monkeytype leaderboard</h1>
-        <div className="">{users.length} users</div>
+      <div className="p-3 flex justify-between">
+        <div>
+          <h1 className="text-3xl">Leaderboard</h1>
+          <div className="">{users.length} users</div>
+        </div>
+        <div>
+          <LangPicker otherLangs={getOtherLangs(usersData)} />
+        </div>
       </div>
       <div className="overflow-auto pb-8">
         {usersData.map((user) => (
@@ -52,7 +58,7 @@ function UserRow({ user }: { user: MonkeyTypeUser }) {
         <h2 className="text-lg font-semibold">{user.name}</h2>
         <p className="text-gray-500">{user.typingStats.completedTests} tests</p>
       </div>
-      <div className={styles.baseGrid + ' gap-3 mx-3'}>
+      <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
         <div className="grid grid-cols-subgrid col-span-4 border rounded">
           <ScoreItem label="15 Seconds" result={getPersonalBest(user.personalBests, 'time-15', lang)} />
           <ScoreItem label="30 Seconds" result={getPersonalBest(user.personalBests, 'time-30', lang)} />
@@ -72,11 +78,16 @@ function UserRow({ user }: { user: MonkeyTypeUser }) {
 
 function ScoreItem({ label, result }: { label: string; result: Best | undefined }) {
   if (!result) {
-    return <div>womp</div>
+    return (
+      <div className="flex flex-col items-center p-2">
+        <h2 className="text-sm">{label}</h2>
+        <div className="text-3xl text-gray-500">0</div>
+      </div>
+    )
   }
 
   return (
-    <div className="flex flex-col items-center p-2 min-w-32">
+    <div className="flex flex-col items-center p-2">
       <h2 className="text-sm">{label}</h2>
       <div className="text-3xl">{result.wpm}</div>
       <div className="text-xl">{result.acc}%</div>
