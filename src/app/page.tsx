@@ -8,6 +8,7 @@ import { getLangsByUsage } from '@/lib/monkeytype-utils'
 import styles from './page.module.css'
 import LangPicker from '@/app/lang-picker'
 import { StarFilledIcon } from '@radix-ui/react-icons'
+import { InvalidUsers } from '@/components/InvalidUsers'
 
 type Props = {
   searchParams: SearchParams
@@ -29,7 +30,8 @@ export default async function Home({ searchParams }: Props) {
     return <div>Too many users</div>
   }
 
-  const usersData = await Promise.all(users.map((it) => getUser(it, lang)))
+  const allUsers = await Promise.all(users.map((it) => getUser(it, lang)))
+  const [usersData, invalidUsers] = R.partition(allUsers, (it): it is UserProfile => !Array.isArray(it))
 
   return (
     <div className="p-4">
@@ -44,6 +46,7 @@ export default async function Home({ searchParams }: Props) {
           <LangPicker userLangs={getLangsByUsage(usersData.map((it) => it.langs))} />
         </div>
       </div>
+      {invalidUsers.length > 0 && <InvalidUsers users={invalidUsers} />}
       <div className="overflow-auto pb-8">
         {R.sortBy(usersData, [R.prop('arbitraryScore'), 'desc']).map((user) => (
           <UserRow

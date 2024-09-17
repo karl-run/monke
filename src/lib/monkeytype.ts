@@ -1,14 +1,18 @@
 import * as R from 'remeda'
 import { Best, MonkeyTypeUser } from '@/lib/monkeytype-user'
-import { getMonkeyTypeUser } from './monkeytype-api'
+import { getMonkeyTypeUser, InvalidUser } from './monkeytype-api'
 import { getPersonalBest, getUserLangs } from './monkeytype-utils'
 
 export type UserProfile = Pick<MonkeyTypeUser, 'name' | 'typingStats'> &
   PersonalBests &
   EnhancedMonke & { langs: string[] }
 
-export async function getUser(name: string, lang: string): Promise<UserProfile> {
+export async function getUser(name: string, lang: string): Promise<UserProfile | InvalidUser> {
   const monkeyTypeUser = await getMonkeyTypeUser(name)
+
+  if (Array.isArray(monkeyTypeUser)) {
+    return monkeyTypeUser
+  }
 
   const personalBests = getPersonalBests(monkeyTypeUser, lang)
   const extraValues = enhanceMonke(personalBests)

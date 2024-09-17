@@ -1,6 +1,8 @@
 import { MonkeyTypeUser } from './monkeytype-user'
 
-export async function getMonkeyTypeUser(name: string): Promise<MonkeyTypeUser> {
+export type InvalidUser = [string, 'not-found' | 'something-else']
+
+export async function getMonkeyTypeUser(name: string): Promise<MonkeyTypeUser | InvalidUser> {
   console.log(`Getting data for user ${name}`)
 
   const response = await fetch(`https://api.monkeytype.com/users/${name}/profile`, {
@@ -10,7 +12,13 @@ export async function getMonkeyTypeUser(name: string): Promise<MonkeyTypeUser> {
   })
 
   if (!response.ok) {
-    throw new Error('Failed to fetch user')
+    if (response.status === 404) {
+      return [name, 'not-found']
+    }
+
+    console.log(`Unable to find user with name ${name}`)
+
+    return [name, 'something-else']
   }
 
   const result = await response.json()
