@@ -1,12 +1,12 @@
+import * as R from 'remeda'
 import { getUser, UserProfile } from '@/lib/monkeytype'
 import { createSearchParamsCache, SearchParams } from 'nuqs/server'
 import { parseAsArrayOf, parseAsString } from 'nuqs'
-import { Best, MonkeyTypeUser } from '@/lib/monkeytype-user'
-import { getLangsByUsage, getPersonalBest } from '@/lib/monkeytype-utils'
+import { Best } from '@/lib/monkeytype-user'
+import { getLangsByUsage } from '@/lib/monkeytype-utils'
 
 import styles from './page.module.css'
 import LangPicker from '@/app/lang-picker'
-import { use } from 'react'
 
 type Props = {
   searchParams: SearchParams
@@ -44,7 +44,7 @@ export default async function Home({ searchParams }: Props) {
         </div>
       </div>
       <div className="overflow-auto pb-8">
-        {usersData.map((user) => (
+        {R.sortBy(usersData, [R.prop('arbitraryScore'), 'desc']).map((user) => (
           <UserRow key={user.name} user={user} lang={lang} />
         ))}
       </div>
