@@ -1,11 +1,12 @@
-import { getUser } from '@/lib/monkeytype'
+import { getUser, UserProfile } from '@/lib/monkeytype'
 import { createSearchParamsCache, SearchParams } from 'nuqs/server'
 import { parseAsArrayOf, parseAsString } from 'nuqs'
 import { Best, MonkeyTypeUser } from '@/lib/monkeytype-user'
-import { getOtherLangs, getPersonalBest } from '@/lib/monkeytype-utils'
+import { getLangsByUsage, getPersonalBest } from '@/lib/monkeytype-utils'
 
 import styles from './page.module.css'
 import LangPicker from '@/app/lang-picker'
+import { use } from 'react'
 
 type Props = {
   searchParams: SearchParams
@@ -17,7 +18,7 @@ const searchParamsCache = createSearchParamsCache({
 })
 
 export default async function Home({ searchParams }: Props) {
-  const { u: users } = searchParamsCache.parse(searchParams)
+  const { u: users, lang } = searchParamsCache.parse(searchParams)
 
   if (users.length === 0) {
     return <div>No users</div>
@@ -27,49 +28,51 @@ export default async function Home({ searchParams }: Props) {
     return <div>Too many users</div>
   }
 
-  const usersData: MonkeyTypeUser[] = await Promise.all(users.map((it) => getUser(it)))
+  const usersData = await Promise.all(users.map((it) => getUser(it, lang)))
 
   return (
-    <div>
+    <div className="p-4">
       <div className="p-3 flex justify-between">
         <div>
           <h1 className="text-3xl">Leaderboard</h1>
-          <div className="">{users.length} users</div>
+          <div className="text-sub-color">
+            {users.length} users, {lang}
+          </div>
         </div>
         <div>
-          <LangPicker otherLangs={getOtherLangs(usersData)} />
+          <LangPicker userLangs={getLangsByUsage(usersData.map((it) => it.langs))} />
         </div>
       </div>
       <div className="overflow-auto pb-8">
         {usersData.map((user) => (
-          <UserRow key={user.name} user={user} />
+          <UserRow key={user.name} user={user} lang={lang} />
         ))}
       </div>
     </div>
   )
 }
 
-function UserRow({ user }: { user: MonkeyTypeUser }) {
-  const lang = searchParamsCache.get('lang')
-
+function UserRow({ user }: { user: UserProfile; lang: string }) {
   return (
     <div className="flex flex-col">
       <div className="m-2">
-        <h2 className="text-lg font-semibold">{user.name}</h2>
+        <h2 className="text-lg font-semibold">
+          {user.name} <span className="text-sub-color text-sm">({user.arbitraryScore.toFixed(0)} score)</span>
+        </h2>
         <p className="text-gray-500">{user.typingStats.completedTests} tests</p>
       </div>
       <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
-          <ScoreItem label="15 Seconds" result={getPersonalBest(user.personalBests, 'time-15', lang)} />
-          <ScoreItem label="30 Seconds" result={getPersonalBest(user.personalBests, 'time-30', lang)} />
-          <ScoreItem label="60 Seconds" result={getPersonalBest(user.personalBests, 'time-60', lang)} />
-          <ScoreItem label="120 Seconds" result={getPersonalBest(user.personalBests, 'time-120', lang)} />
+          <ScoreItem label="15 Seconds" result={user['time-15']} />
+          <ScoreItem label="30 Seconds" result={user['time-30']} />
+          <ScoreItem label="60 Seconds" result={user['time-60']} />
+          <ScoreItem label="120 Seconds" result={user['time-120']} />
         </div>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
-          <ScoreItem label="10 Words" result={getPersonalBest(user.personalBests, 'words-10', lang)} />
-          <ScoreItem label="25 Words" result={getPersonalBest(user.personalBests, 'words-25', lang)} />
-          <ScoreItem label="50 Words" result={getPersonalBest(user.personalBests, 'words-50', lang)} />
-          <ScoreItem label="100 Words" result={getPersonalBest(user.personalBests, 'words-100', lang)} />
+          <ScoreItem label="10 Words" result={user['words-10']} />
+          <ScoreItem label="25 Words" result={user['words-25']} />
+          <ScoreItem label="50 Words" result={user['words-50']} />
+          <ScoreItem label="100 Words" result={user['words-100']} />
         </div>
       </div>
     </div>

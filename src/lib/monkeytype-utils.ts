@@ -25,12 +25,23 @@ function lookupType(type: Words | Time) {
   }
 }
 
-export function getOtherLangs(users: MonkeyTypeUser[]): string[] {
+export function getUserLangs(user: MonkeyTypeUser): string[] {
   return R.pipe(
-    users,
-    R.flatMap((it) => [...R.values(it.personalBests.time), ...R.values(it.personalBests.words)]),
+    [...R.values(user.personalBests.time), ...R.values(user.personalBests.words)],
     R.flat(),
     R.groupBy((it) => it.language),
+    R.entries(),
+    R.map(([lang, group]) => [lang, group.length] as const),
+    R.sortBy([R.last(), 'desc']),
+    R.map(R.first()),
+  )
+}
+
+export function getLangsByUsage(userLangs: string[][]): string[] {
+  return R.pipe(
+    userLangs,
+    R.flat(),
+    R.groupBy((lang) => lang),
     R.entries(),
     R.map(([lang, group]) => [lang, group.length] as const),
     R.sortBy([R.last(), 'desc']),
