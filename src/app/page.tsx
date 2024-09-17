@@ -24,10 +24,6 @@ const searchParamsCache = createSearchParamsCache({
 export default async function Home({ searchParams }: Props) {
   const { u: users, lang } = searchParamsCache.parse(searchParams)
 
-  if (users.length === 0) {
-    return <div>No users</div>
-  }
-
   if (users.length > 6) {
     return <div>Too many users</div>
   }
@@ -60,6 +56,11 @@ export default async function Home({ searchParams }: Props) {
             )}
           />
         ))}
+        {usersData.length === 0 && (
+          <div className="w-full bg-sub-alt-color rounded min-h-32 flex items-center justify-center text-xl">
+            No users
+          </div>
+        )}
       </div>
       <AddUser />
     </div>
