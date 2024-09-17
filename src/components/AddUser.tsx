@@ -6,7 +6,9 @@ import { useQueryState } from 'nuqs'
 export function AddUser() {
   const [users, setUsers] = useQueryState('u', usersParser.withOptions({ shallow: false }))
   const add = (newUser: string) => {
-    setUsers([...users, newUser])
+    const newUsers = [...users, newUser]
+    setUsers(newUsers)
+    document.cookie = `users=${newUsers}; path=/;`
   }
 
   return (

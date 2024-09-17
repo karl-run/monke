@@ -12,7 +12,9 @@ interface InvalidUsersProps {
 export function InvalidUsers({ invalidUsers }: InvalidUsersProps) {
   const [users, setUsers] = useQueryState('u', usersParser.withOptions({ shallow: false }))
   const remove = (index: string) => {
-    setUsers(users.filter((u) => u !== index))
+    const newUsers = users.filter((u) => u !== index)
+    setUsers(newUsers)
+    document.cookie = `users=${newUsers}; path=/;`
   }
 
   return (
