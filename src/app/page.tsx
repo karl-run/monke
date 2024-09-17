@@ -59,13 +59,13 @@ function UserRow({ user }: { user: MonkeyTypeUser }) {
         <p className="text-gray-500">{user.typingStats.completedTests} tests</p>
       </div>
       <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
-        <div className="grid grid-cols-subgrid col-span-4 border rounded">
+        <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
           <ScoreItem label="15 Seconds" result={getPersonalBest(user.personalBests, 'time-15', lang)} />
           <ScoreItem label="30 Seconds" result={getPersonalBest(user.personalBests, 'time-30', lang)} />
           <ScoreItem label="60 Seconds" result={getPersonalBest(user.personalBests, 'time-60', lang)} />
           <ScoreItem label="120 Seconds" result={getPersonalBest(user.personalBests, 'time-120', lang)} />
         </div>
-        <div className="grid grid-cols-subgrid col-span-4 border rounded">
+        <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
           <ScoreItem label="10 Words" result={getPersonalBest(user.personalBests, 'words-10', lang)} />
           <ScoreItem label="25 Words" result={getPersonalBest(user.personalBests, 'words-25', lang)} />
           <ScoreItem label="50 Words" result={getPersonalBest(user.personalBests, 'words-50', lang)} />
@@ -80,7 +80,7 @@ function ScoreItem({ label, result }: { label: string; result: Best | undefined 
   if (!result) {
     return (
       <div className="flex flex-col items-center p-2">
-        <h2 className="text-sm">{label}</h2>
+        <h2 className="text-sm text-sub-color">{label}</h2>
         <div className="text-3xl text-gray-500">0</div>
       </div>
     )
@@ -88,7 +88,7 @@ function ScoreItem({ label, result }: { label: string; result: Best | undefined 
 
   return (
     <div className="flex flex-col items-center p-2">
-      <h2 className="text-sm">{label}</h2>
+      <h2 className="text-sm text-sub-color">{label}</h2>
       <div className="text-3xl">{result.wpm}</div>
       <div className="text-xl">{result.acc}%</div>
     </div>

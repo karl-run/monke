@@ -17,7 +17,7 @@ function LangPicker({ otherLangs }: Props): ReactElement {
   return (
     <select
       defaultValue={lang ?? 'english'}
-      className="dark:bg-black dark:border p-2 rounded"
+      className="bg-sub-alt-color border border-sub-color p-2 rounded"
       onChange={(event) => {
         setLang(event.target.value)
       }}
