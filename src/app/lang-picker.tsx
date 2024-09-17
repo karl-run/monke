@@ -22,7 +22,7 @@ function LangPicker({ otherLangs }: Props): ReactElement {
         setLang(event.target.value)
       }}
     >
-      <option value="english">english</option>
+      {!otherLangs.includes('english') && <option value="english">english</option>}
       {otherLangs.map((it) => (
         <option key={it} value={it}>
           {it}

@@ -30,8 +30,10 @@ export function getOtherLangs(users: MonkeyTypeUser[]): string[] {
     users,
     R.flatMap((it) => [...R.values(it.personalBests.time), ...R.values(it.personalBests.words)]),
     R.flat(),
-    R.map((it) => it.language),
-    R.unique(),
-    R.sortBy([(it) => it, 'desc']),
+    R.groupBy((it) => it.language),
+    R.entries(),
+    R.map(([lang, group]) => [lang, group.length] as const),
+    R.sortBy([R.last(), 'desc']),
+    R.map(R.first()),
   )
 }
