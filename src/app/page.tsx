@@ -1,5 +1,5 @@
 import * as R from 'remeda'
-import { getUser, UserProfile } from '@/lib/monkeytype'
+import { getGoldStars, getUser, GoldStars, UserProfile } from '@/lib/monkeytype'
 import { createSearchParamsCache, SearchParams } from 'nuqs/server'
 import { parseAsArrayOf, parseAsString } from 'nuqs'
 import { Best } from '@/lib/monkeytype-user'
@@ -7,6 +7,7 @@ import { getLangsByUsage } from '@/lib/monkeytype-utils'
 
 import styles from './page.module.css'
 import LangPicker from '@/app/lang-picker'
+import { StarFilledIcon } from '@radix-ui/react-icons'
 
 type Props = {
   searchParams: SearchParams
@@ -45,14 +46,21 @@ export default async function Home({ searchParams }: Props) {
       </div>
       <div className="overflow-auto pb-8">
         {R.sortBy(usersData, [R.prop('arbitraryScore'), 'desc']).map((user) => (
-          <UserRow key={user.name} user={user} lang={lang} />
+          <UserRow
+            key={user.name}
+            user={user}
+            goldStars={getGoldStars(
+              user,
+              usersData.filter((it) => it.name !== user.name),
+            )}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-function UserRow({ user }: { user: UserProfile; lang: string }) {
+function UserRow({ user, goldStars }: { user: UserProfile; goldStars: GoldStars }) {
   return (
     <div className="flex flex-col">
       <div className="m-2">
@@ -63,23 +71,23 @@ function UserRow({ user }: { user: UserProfile; lang: string }) {
       </div>
       <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
-          <ScoreItem label="15 Seconds" result={user['time-15']} />
-          <ScoreItem label="30 Seconds" result={user['time-30']} />
-          <ScoreItem label="60 Seconds" result={user['time-60']} />
-          <ScoreItem label="120 Seconds" result={user['time-120']} />
+          <ScoreItem label="15 Seconds" result={user['time-15']} isGold={goldStars['time-15']} />
+          <ScoreItem label="30 Seconds" result={user['time-30']} isGold={goldStars['time-30']} />
+          <ScoreItem label="60 Seconds" result={user['time-60']} isGold={goldStars['time-60']} />
+          <ScoreItem label="120 Seconds" result={user['time-120']} isGold={goldStars['time-120']} />
         </div>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
-          <ScoreItem label="10 Words" result={user['words-10']} />
-          <ScoreItem label="25 Words" result={user['words-25']} />
-          <ScoreItem label="50 Words" result={user['words-50']} />
-          <ScoreItem label="100 Words" result={user['words-100']} />
+          <ScoreItem label="10 Words" result={user['words-10']} isGold={goldStars['words-10']} />
+          <ScoreItem label="25 Words" result={user['words-25']} isGold={goldStars['words-25']} />
+          <ScoreItem label="50 Words" result={user['words-50']} isGold={goldStars['words-50']} />
+          <ScoreItem label="100 Words" result={user['words-100']} isGold={goldStars['words-100']} />
         </div>
       </div>
     </div>
   )
 }
 
-function ScoreItem({ label, result }: { label: string; result: Best | undefined }) {
+function ScoreItem({ label, result, isGold }: { label: string; result: Best | undefined; isGold: boolean }) {
   if (!result) {
     return (
       <div className="flex flex-col items-center p-2">
@@ -90,10 +98,16 @@ function ScoreItem({ label, result }: { label: string; result: Best | undefined 
   }
 
   return (
-    <div className="flex flex-col items-center p-2">
+    <div className="flex flex-col items-center p-2 relative">
       <h2 className="text-sm text-sub-color">{label}</h2>
       <div className="text-3xl">{result.wpm}</div>
       <div className="text-xl">{result.acc}%</div>
+      {isGold && (
+        <div>
+          <StarFilledIcon className="absolute top-2.5 left-2.5 text-sub-color" />
+          <StarFilledIcon className="absolute top-2.5 left-2.5 text-sub-color animate-ping" />
+        </div>
+      )}
     </div>
   )
 }

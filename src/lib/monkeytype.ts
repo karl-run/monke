@@ -1,3 +1,4 @@
+import * as R from 'remeda'
 import { Best, MonkeyTypeUser } from '@/lib/monkeytype-user'
 import { getMonkeyTypeUser } from './monkeytype-api'
 import { getPersonalBest, getUserLangs } from './monkeytype-utils'
@@ -30,6 +31,32 @@ export type PersonalBests = {
   'words-25': Best | undefined
   'words-50': Best | undefined
   'words-100': Best | undefined
+}
+
+export type GoldStars = Record<keyof PersonalBests, boolean>
+
+export function getGoldStars(user: UserProfile, otherUsers: UserProfile[]): GoldStars {
+  return {
+    'time-15': isUserBest(user, otherUsers, 'time-15'),
+    'time-30': isUserBest(user, otherUsers, 'time-30'),
+    'time-60': isUserBest(user, otherUsers, 'time-60'),
+    'time-120': isUserBest(user, otherUsers, 'time-120'),
+    'words-10': isUserBest(user, otherUsers, 'words-10'),
+    'words-25': isUserBest(user, otherUsers, 'words-25'),
+    'words-50': isUserBest(user, otherUsers, 'words-50'),
+    'words-100': isUserBest(user, otherUsers, 'words-100'),
+  }
+}
+
+function isUserBest(user: UserProfile, otherUsers: UserProfile[], type: keyof GoldStars): boolean {
+  const userWpm: number = user[type]?.wpm ?? 0
+  const bestOtherUserWpm: number =
+    R.firstBy(
+      otherUsers.map((it): number => it[type]?.wpm ?? 0),
+      [R.identity(), 'desc'],
+    ) ?? 0
+
+  return userWpm > bestOtherUserWpm
 }
 
 function getPersonalBests({ personalBests }: MonkeyTypeUser, lang: string): PersonalBests {
