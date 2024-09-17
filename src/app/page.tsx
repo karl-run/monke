@@ -6,17 +6,19 @@ import { Best } from '@/lib/monkeytype-user'
 import { getLangsByUsage } from '@/lib/monkeytype-utils'
 
 import styles from './page.module.css'
-import LangPicker from '@/app/lang-picker'
 import { StarFilledIcon } from '@radix-ui/react-icons'
 import { InvalidUsers } from '@/components/InvalidUsers'
+import { AddUser } from '@/components/AddUser'
+import LangPicker from '@/components/LangPicker'
+import { langParser, usersParser } from '@/state/url'
 
 type Props = {
   searchParams: SearchParams
 }
 
 const searchParamsCache = createSearchParamsCache({
-  u: parseAsArrayOf(parseAsString, ',').withDefault([]),
-  lang: parseAsString.withDefault('english'),
+  u: usersParser,
+  lang: langParser,
 })
 
 export default async function Home({ searchParams }: Props) {
@@ -46,7 +48,7 @@ export default async function Home({ searchParams }: Props) {
           <LangPicker userLangs={getLangsByUsage(usersData.map((it) => it.langs))} />
         </div>
       </div>
-      {invalidUsers.length > 0 && <InvalidUsers users={invalidUsers} />}
+      {invalidUsers.length > 0 && <InvalidUsers invalidUsers={invalidUsers} />}
       <div className="overflow-auto pb-8">
         {R.sortBy(usersData, [R.prop('arbitraryScore'), 'desc']).map((user) => (
           <UserRow
@@ -59,6 +61,7 @@ export default async function Home({ searchParams }: Props) {
           />
         ))}
       </div>
+      <AddUser />
     </div>
   )
 }
