@@ -70,7 +70,14 @@ function UserRow({ user, goldStars }: { user: UserProfile; goldStars: GoldStars 
         <h2 className="text-lg font-semibold">
           {user.name} <span className="text-sub-color text-sm">({user.arbitraryScore.toFixed(0)} score)</span>
         </h2>
-        <p className="text-gray-500">{user.typingStats.completedTests} tests</p>
+        <div className="grid grid-cols-2 grid-rows-2 gap-x-2 w-fit text-sm font-semibold">
+          <p className="text-gray-500">{user.typingStats.completedTests} completed</p>
+          <p className="text-gray-500">{(user.typingStats.timeTyping / 60 / 60).toFixed(1)} hours</p>
+          <p className="text-gray-500">{user.typingStats.startedTests} started</p>
+          <p className="text-gray-500">
+            {((user.typingStats.completedTests / user.typingStats.startedTests) * 100).toFixed(1)}% finished
+          </p>
+        </div>
       </div>
       <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
