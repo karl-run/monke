@@ -32,7 +32,7 @@ export default async function Home({ searchParams }: Props) {
   const [usersData, invalidUsers] = R.partition(allUsers, (it): it is UserProfile => !Array.isArray(it))
 
   return (
-    <div className="p-4">
+    <div className="sm:p-4">
       <div className="p-3 flex justify-between">
         <div>
           <h1 className="text-3xl">Leaderboard</h1>
@@ -69,12 +69,12 @@ export default async function Home({ searchParams }: Props) {
 
 function UserRow({ user, goldStars }: { user: UserProfile; goldStars: GoldStars }) {
   return (
-    <div className="flex flex-col">
-      <div className="m-2">
+    <div className="flex flex-col w-fit">
+      <div className="mx-4">
         <h2 className="text-lg font-semibold">
           {user.name} <span className="text-sub-color text-sm">({user.arbitraryScore.toFixed(0)} score)</span>
         </h2>
-        <div className="grid grid-cols-2 grid-rows-2 gap-x-2 w-fit text-sm font-semibold">
+        <div className="grid grid-cols-2 grid-rows-2 gap-x-2 w-fit text-sm font-semibold bg-sub">
           <p className="text-gray-500">{user.typingStats.completedTests} completed</p>
           <p className="text-gray-500">{(user.typingStats.timeTyping / 60 / 60).toFixed(1)} hours</p>
           <p className="text-gray-500">{user.typingStats.startedTests} started</p>
@@ -83,7 +83,7 @@ function UserRow({ user, goldStars }: { user: UserProfile; goldStars: GoldStars 
           </p>
         </div>
       </div>
-      <div className={styles.baseGrid + ' gap-3 mx-3 min-h-24'}>
+      <div className={styles.baseGrid + ' gap-3 min-h-24 p-4 pt-1'}>
         <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
           <ScoreItem label="15 Seconds" result={user['time-15']} isGold={goldStars['time-15']} />
           <ScoreItem label="30 Seconds" result={user['time-30']} isGold={goldStars['time-30']} />
