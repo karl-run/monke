@@ -5,11 +5,11 @@ type Words = `${'words'}-${'10' | '25' | '50' | '100'}`
 type Time = `${'time'}-${'15' | '30' | '60' | '120'}`
 
 export function getPersonalBest(best: PersonalBests, type: Words | Time, lang: string): Best | undefined {
-  return R.pipe(
-    best,
-    lookupType(type),
-    R.find((it) => it.language === lang),
-  )
+  const category = lookupType(type)(best)
+
+  if (!category) return undefined
+
+  return R.find(category, (it) => it.language === lang)
 }
 
 function lookupType(type: Words | Time) {
