@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-import ThemePicker from '@/components/theme-picker/ThemePicker'
-import { Suspense } from 'react'
+import { PropsWithChildren } from 'react'
 import { cookies } from 'next/headers'
 
 const geistSans = localFont({
@@ -21,11 +20,7 @@ export const metadata: Metadata = {
   description: 'Simple custom Monkeytype leaderboards',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   const theme = cookies().get('theme')?.value
 
   return (
@@ -33,12 +28,7 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href={`https://monkeytype.com/themes/${theme ?? 'serika_dark'}.css`} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Suspense>
-          <ThemePicker persistedTheme={theme ?? null} />
-        </Suspense>
-        {children}
-      </body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   )
 }
