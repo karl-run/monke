@@ -6,6 +6,9 @@ export async function getMonkeyTypeUser(name: string): Promise<MonkeyTypeUser | 
   console.log(`Getting data for user ${name}`)
 
   const response = await fetch(`https://api.monkeytype.com/users/${name}/profile`, {
+    headers: {
+      Authorization: `ApeKey ${process.env.MONKEY_TYPE_APE_KEY}`,
+    },
     next: {
       revalidate: 60,
     },
