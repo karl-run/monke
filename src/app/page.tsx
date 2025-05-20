@@ -1,7 +1,6 @@
 import * as R from 'remeda'
 import { getGoldStars, getUser, GoldStars, UserProfile } from '@/lib/monkeytype'
 import { createSearchParamsCache, SearchParams } from 'nuqs/server'
-import { parseAsArrayOf, parseAsString } from 'nuqs'
 import { Best } from '@/lib/monkeytype-user'
 import { getLangsByUsage } from '@/lib/monkeytype-utils'
 
