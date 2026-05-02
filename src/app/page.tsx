@@ -1,27 +1,24 @@
 import * as R from 'remeda'
 import { getGoldStars, getUser, GoldStars, UserProfile } from '@/lib/monkeytype'
-import { createSearchParamsCache, SearchParams } from 'nuqs/server'
+import { createSearchParamsCache } from 'nuqs/server'
 import { Best } from '@/lib/monkeytype-user'
 import { getLangsByUsage } from '@/lib/monkeytype-utils'
 
-import styles from './page.module.css'
 import { StarFilledIcon } from '@radix-ui/react-icons'
 import { InvalidUsers } from '@/components/InvalidUsers'
 import { AddUser } from '@/components/AddUser'
 import LangPicker from '@/components/LangPicker'
 import { langParser, usersParser } from '@/state/url'
 
-type Props = {
-  searchParams: SearchParams
-}
+import styles from './page.module.css'
 
 const searchParamsCache = createSearchParamsCache({
   u: usersParser,
   lang: langParser,
 })
 
-export default async function Home({ searchParams }: Props) {
-  const { u: users, lang } = searchParamsCache.parse(searchParams)
+export default async function Home({ searchParams }: PageProps<'/'>) {
+  const { u: users, lang } = searchParamsCache.parse(await searchParams)
 
   if (users.length > 6) {
     return <div>Too many users</div>

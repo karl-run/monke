@@ -1,8 +1,9 @@
+import './globals.css'
+
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import './globals.css'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { PropsWithChildren } from 'react'
-import { cookies } from 'next/headers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -21,14 +22,14 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
-  const theme = cookies().get('theme')?.value
-
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href={`https://monkeytype.com/themes/${theme ?? 'serika_dark'}.css`} />
+        <link rel="stylesheet" href={`https://monkeytype.com/themes/serika_dark.css`} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <NuqsAdapter>{children}</NuqsAdapter>
+      </body>
     </html>
   )
 }

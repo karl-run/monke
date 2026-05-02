@@ -1,4 +1,4 @@
-import { parseAsArrayOf, parseAsString } from "nuqs";
+import { parseAsArrayOf, parseAsString } from "nuqs/server";
 
 
 export const langParser = parseAsString.withDefault('english')
