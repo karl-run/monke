@@ -1,28 +1,57 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --bg-color: #2e1a47;
-  --main-color: #f7f2ea;
-  --caret-color: #f7f2ea;
-  --sub-color: #c18fff;
-  --sub-alt-color: #27173c;
-  --text-color: #f7f2ea;
-  --error-color: #f04e98;
-  --error-extra-color: #bd1c66;
-  --colorful-error-color: #f04e98;
-  --colorful-error-extra-color: #bd1c66;
+@theme {
+  --color-bg-color: var(--bg-color);
+  --color-main-color: var(--main-color);
+  --color-caret-color: var(--caret-color);
+  --color-sub-color: var(--sub-color);
+  --color-sub-alt-color: var(--sub-alt-color);
+  --color-text-color: var(--text-color);
+  --color-error-color: var(--error-color);
+  --color-error-extra-color: var(--error-extra-color);
+  --color-colorful-error-color: var(--colorful-error-color);
+  --color-colorful-error-extra-color: var(--colorful-error-extra-color);
 }
 
-body {
-  color: var(--main-color);
-  background: var(--bg-color);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  :root {
+    --bg-color: #2e1a47;
+    --main-color: #f7f2ea;
+    --caret-color: #f7f2ea;
+    --sub-color: #c18fff;
+    --sub-alt-color: #27173c;
+    --text-color: #f7f2ea;
+    --error-color: #f04e98;
+    --error-extra-color: #bd1c66;
+    --colorful-error-color: #f04e98;
+    --colorful-error-extra-color: #bd1c66;
+  }
+
+  body {
+    color: var(--main-color);
+    background: var(--bg-color);
+    font-family: Arial, Helvetica, sans-serif;
   }
 }

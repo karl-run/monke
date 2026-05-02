@@ -22,7 +22,7 @@ export function AddUser() {
             type="text"
             id="username"
             name="username"
-            className="p-2 bg-sub-alt-color rounded"
+            className="p-2 bg-sub-alt-color rounded-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 const input = e.target as HTMLInputElement
@@ -41,7 +41,7 @@ export function AddUser() {
                 input.value = ''
               }
             }}
-            className="bg-sub-color text-sub-alt-color rounded min-w-20"
+            className="bg-sub-color text-sub-alt-color rounded-sm min-w-20"
           >
             Add
           </button>

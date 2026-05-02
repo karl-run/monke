@@ -56,7 +56,7 @@ export default async function Home({ searchParams }: Props) {
           />
         ))}
         {usersData.length === 0 && (
-          <div className="w-full bg-sub-alt-color rounded min-h-32 flex items-center justify-center text-xl">
+          <div className="w-full bg-sub-alt-color rounded-sm min-h-32 flex items-center justify-center text-xl">
             No users
           </div>
         )}
@@ -83,13 +83,13 @@ function UserRow({ user, goldStars }: { user: UserProfile; goldStars: GoldStars 
         </div>
       </div>
       <div className={styles.baseGrid + ' gap-3 min-h-24 p-4 pt-1'}>
-        <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
+        <div className="grid grid-cols-subgrid col-span-4 rounded-sm bg-sub-alt-color">
           <ScoreItem label="15 Seconds" result={user['time-15']} isGold={goldStars['time-15']} />
           <ScoreItem label="30 Seconds" result={user['time-30']} isGold={goldStars['time-30']} />
           <ScoreItem label="60 Seconds" result={user['time-60']} isGold={goldStars['time-60']} />
           <ScoreItem label="120 Seconds" result={user['time-120']} isGold={goldStars['time-120']} />
         </div>
-        <div className="grid grid-cols-subgrid col-span-4 rounded bg-sub-alt-color">
+        <div className="grid grid-cols-subgrid col-span-4 rounded-sm bg-sub-alt-color">
           <ScoreItem label="10 Words" result={user['words-10']} isGold={goldStars['words-10']} />
           <ScoreItem label="25 Words" result={user['words-25']} isGold={goldStars['words-25']} />
           <ScoreItem label="50 Words" result={user['words-50']} isGold={goldStars['words-50']} />

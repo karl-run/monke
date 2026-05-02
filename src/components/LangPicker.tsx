@@ -17,7 +17,7 @@ function LangPicker({ userLangs }: Props): ReactElement {
   return (
     <select
       defaultValue={lang ?? 'english'}
-      className="bg-sub-alt-color border border-sub-color p-2 rounded max-w-40"
+      className="bg-sub-alt-color border border-sub-color p-2 rounded-sm max-w-40"
       onChange={(event) => {
         setLang(event.target.value)
         document.cookie = `lang=${event.target.value}; path=/;`
